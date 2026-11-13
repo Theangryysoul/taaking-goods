@@ -17,6 +17,7 @@ import { buildOrderMessage } from "../lib/order";
 import { copyText } from "../lib/clipboard";
 import { startScroll, stopScroll } from "../lib/scroll";
 import ResinArt from "./ResinArt";
+import ProductArt from "./ProductArt";
 
 const emptyFields = { name: "", city: "", pincode: "", note: "" };
 
@@ -205,7 +206,7 @@ export default function CartDrawer() {
                       {product.image ? (
                         <img src={product.image} alt={product.name} />
                       ) : (
-                        <ResinArt shape={product.art.shape} palette={product.art.palette} />
+                        <ProductArt product={product} />
                       )}
                     </div>
 
@@ -259,7 +260,8 @@ export default function CartDrawer() {
                 <div className="cart-form__head">
                   <p className="eyebrow">Delivery details</p>
                   <p className="caption-2">
-                    We confirm stock, shipping, and the final price before you pay.
+                    We confirm stock, shipping, and the final price before you pay. A 75% advance
+                    confirms the order.
                   </p>
                 </div>
 
@@ -367,8 +369,13 @@ export default function CartDrawer() {
 
             <p className="caption-2 cart-foot__note">
               {hasWhatsApp()
-                ? "No payment is taken here. We confirm stock, shipping, and the final price before you pay."
+                ? "No payment is taken here. A 75% advance confirms your order; the balance and shipping are agreed on WhatsApp before dispatch."
                 : "WhatsApp ordering is not connected yet. Copy your order and send it to the studio."}
+            </p>
+
+            <p className="caption-2 cart-foot__note">
+              Returns are not offered by default. Only pieces marked return-eligible may be
+              returned, with a 30% deduction.
             </p>
 
             {status.message && (

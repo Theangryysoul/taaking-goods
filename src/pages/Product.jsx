@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight, ShoppingBag } from "@phosphor-icons/react";
-import ResinArt from "../components/ResinArt";
+import ProductArt from "../components/ProductArt";
 import Accordion from "../components/Accordion";
 import Quantity from "../components/Quantity";
 import Reveal from "../components/Reveal";
@@ -18,6 +18,7 @@ function ProductView({ product }) {
   const [qty, setQty] = useState(1);
   const { add, openCart } = useCart();
   const related = getRelated(product, 3);
+  const isJewellery = product.category === "Jewellery";
 
   usePageMeta({
     title: product.name,
@@ -51,15 +52,20 @@ function ProductView({ product }) {
                 {product.image ? (
                   <img src={product.image} alt={product.name} />
                 ) : (
-                  <ResinArt
-                    shape={product.art.shape}
-                    palette={product.art.palette}
-                    label={`${product.name}, a hand poured resin piece`}
+                  <ProductArt
+                    product={product}
+                    label={
+                      isJewellery
+                        ? `${product.name}, hallmarked ${product.metal?.toLowerCase()} jewellery`
+                        : `${product.name}, a hand poured resin piece`
+                    }
                   />
                 )}
               </Reveal>
               <p className="caption-2 product-view__caption">
-                Hand poured, so tone and pattern vary from piece to piece.
+                {isJewellery
+                  ? "Hallmarked metal. Purity, weight, and making charges are confirmed on WhatsApp."
+                  : "Hand poured, so tone and pattern vary from piece to piece."}
               </p>
             </div>
 
@@ -67,9 +73,16 @@ function ProductView({ product }) {
               <Reveal delay={60}>
                 <p className="eyebrow">{product.category}</p>
                 <h1 className="heading-2 product-view__title">{product.name}</h1>
+                {isJewellery && (
+                  <p className="product-view__hallmark">
+                    Hallmarked {product.metal?.toLowerCase()} · purity, weight, and making charges confirmed before payment
+                  </p>
+                )}
                 <div className="product-view__price-row">
                   <p className="title-1">{formatPrice(product.price)}</p>
-                  <p className="caption-2">Confirmed on WhatsApp before payment.</p>
+                  <p className="caption-2">
+                    Confirmed on WhatsApp. A 75% advance confirms the order.
+                  </p>
                 </div>
 
                 <p className="body-2 product-view__summary">{product.summary}</p>
@@ -116,11 +129,13 @@ function ProductView({ product }) {
                   items={[
                     {
                       title: "Care",
-                      copy: "Wipe with a soft, slightly damp cloth. Keep the piece out of direct sun for long stretches and away from heat. A care card travels with every order.",
+                      copy: isJewellery
+                        ? "Store gold and silver dry and separately from harder pieces. Wipe with the soft cloth supplied, and remove jewellery before swimming, workouts, or applying perfume. A care card travels with every order."
+                        : "Wipe with a soft, slightly damp cloth. Keep the piece out of direct sun for long stretches and away from heat. A care card travels with every order.",
                     },
                     {
-                      title: "Delivery and returns",
-                      copy: "Orders are packed and shipped across India. Shipping is quoted by pincode when we confirm on WhatsApp. If a piece arrives damaged, send a photo within 48 hours and we will make it right.",
+                      title: "Payment, delivery and returns",
+                      copy: "Orders are packed and shipped across India. Shipping is quoted by pincode when we confirm on WhatsApp. A 75% advance confirms your order, and the balance is agreed before dispatch. Returns are not offered by default: only pieces marked return-eligible may be returned, with a 30% deduction. If a piece arrives damaged, send a photo within 48 hours and we will make it right.",
                     },
                   ]}
                 />

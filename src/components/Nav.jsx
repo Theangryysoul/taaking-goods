@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ShoppingBag, ArrowUpRight, EnvelopeSimple, WhatsappLogo } from "@phosphor-icons/react";
 import Wordmark from "./Wordmark";
 import { useCart } from "../context/CartContext";
@@ -8,6 +8,7 @@ import { startScroll, stopScroll } from "../lib/scroll";
 
 const links = [
   { to: "/shop", label: "Shop" },
+  { to: "/shop?category=Jewellery", label: "Jewellery", category: "Jewellery" },
   { to: "/about", label: "Studio" },
   { to: "/contact", label: "Contact" },
 ];
@@ -19,6 +20,17 @@ export default function Nav() {
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
   const previousFocus = useRef(null);
+  const activeCategory = new URLSearchParams(location.search).get("category");
+
+  const isLinkActive = (link) => {
+    if (link.category) {
+      return location.pathname === "/shop" && activeCategory === link.category;
+    }
+    if (link.to === "/shop") {
+      return location.pathname === "/shop" && !activeCategory;
+    }
+    return location.pathname === link.to;
+  };
 
   useEffect(() => {
     setOpen(false);
@@ -82,13 +94,14 @@ export default function Nav() {
 
         <nav className="nav-links" aria-label="Primary">
           {links.map((link) => (
-            <NavLink
+            <Link
               key={link.to}
               to={link.to}
-              className={({ isActive }) => `nav-link${isActive ? " is-active" : ""}`}
+              className={`nav-link${isLinkActive(link) ? " is-active" : ""}`}
+              aria-current={isLinkActive(link) ? "page" : undefined}
             >
               {link.label}
-            </NavLink>
+            </Link>
           ))}
         </nav>
 
@@ -138,25 +151,25 @@ export default function Nav() {
 
           <nav className="mobile-menu__links" aria-label="Mobile">
             {links.map((link, index) => (
-              <NavLink
+              <Link
                 key={link.to}
                 to={link.to}
                 onClick={closeMenu}
-                className={({ isActive }) =>
-                  `mobile-menu__link${isActive ? " is-active" : ""}`
-                }
+                className={`mobile-menu__link${isLinkActive(link) ? " is-active" : ""}`}
+                aria-current={isLinkActive(link) ? "page" : undefined}
                 style={{ "--item": index }}
               >
                 <span className="mobile-menu__index">0{index + 1}</span>
                 <span className="mobile-menu__label">{link.label}</span>
                 <ArrowUpRight size={24} weight="light" aria-hidden="true" />
-              </NavLink>
+              </Link>
             ))}
           </nav>
 
           <div className="mobile-menu__foot">
             <p className="body-5">
-              Hand poured resin objects, made in small batches in India.
+              Hand poured resin objects and hallmarked gold and silver jewellery, made in small
+              batches in India.
             </p>
             <div className="mobile-menu__contact">
               <a href={`mailto:${site.email}`} className="mobile-menu__contact-link">

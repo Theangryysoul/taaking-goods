@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUp, InstagramLogo, WhatsappLogo } from "@phosphor-icons/react";
+import { ArrowUp, FacebookLogo, InstagramLogo, WhatsappLogo } from "@phosphor-icons/react";
 import Wordmark from "./Wordmark";
 import { hasWhatsApp, site, whatsappUrl } from "../config";
 import { scrollToTop } from "../lib/scroll";
@@ -14,7 +14,8 @@ export default function Footer() {
               <Wordmark wordmark={site.wordmark} />
             </Link>
             <p className="body-3 footer-brand__copy">
-              Hand poured resin objects, made in small batches in India.
+              Hand poured resin objects and hallmarked gold and silver jewellery, made in small
+              batches in India.
             </p>
             <div className="footer-contact">
               <a href={`mailto:${site.email}`}>{site.email}</a>
@@ -32,6 +33,12 @@ export default function Footer() {
                 <a href={site.instagram} target="_blank" rel="noreferrer">
                   <InstagramLogo size={15} aria-hidden="true" />
                   Instagram
+                </a>
+              )}
+              {site.facebook && (
+                <a href={site.facebook} target="_blank" rel="noreferrer">
+                  <FacebookLogo size={15} aria-hidden="true" />
+                  Facebook
                 </a>
               )}
             </div>
@@ -73,7 +80,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p className="caption-2">© 2026 {site.name}. All rights reserved.</p>
-          <p className="caption-2">Hand poured in {site.country}.</p>
+          <p className="caption-2">Made in {site.country}.</p>
           <button
             type="button"
             className="footer-top-link"

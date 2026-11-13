@@ -6,6 +6,11 @@
 // number in rupees when you are ready; until then every price shows as
 // "Price on enquiry". To use your own photographs, add `image: "/images/file.jpg"`
 // (put the file in `public/images`) and the generated visual steps aside.
+//
+// Jewellery is a separate collection: hallmarked gold and silver, not resin.
+// Its `art` shapes are drawn by `JewelleryArt.jsx`; resin pieces use
+// `ResinArt.jsx`. Purity, weight, and making charges are deliberately left for
+// the WhatsApp confirmation rather than invented here.
 // ---------------------------------------------------------------------------
 
 export const categories = ["All", "Tableware", "Decor", "Gifting", "Jewellery"];
@@ -66,7 +71,7 @@ export const products = [
       "Hand sanded edges",
       "Wipe with a soft dry cloth",
     ],
-    featured: true,
+    featured: false,
   },
   {
     id: "tide-bookmark",
@@ -145,23 +150,109 @@ export const products = [
     featured: false,
   },
   {
-    id: "ochre-pendant",
-    slug: "ochre-pendant",
-    name: "Ochre pendant",
+    id: "gold-chain",
+    slug: "hallmarked-gold-chain",
+    name: "Hallmarked gold chain",
     category: "Jewellery",
     price: null,
-    art: { shape: "pendant", palette: "amber" },
+    metal: "Gold",
+    hallmark: true,
+    art: { shape: "chain", palette: "gold" },
     image: null,
-    summary: "A warm oval on a fine chain, light enough to forget you have it on.",
+    summary: "A fine gold chain with a small bar pendant, made for every day.",
     description:
-      "A small amber oval, polished to a soft glow and hung on a fine chain. Each pour carries a slightly different depth, so no two sit exactly the same.",
+      "A light chain in hallmarked gold, finished by hand and kept simple. The small bar sits just below the collarbone and works on its own or layered. Purity, weight, and making charges are confirmed on WhatsApp before payment.",
     details: [
-      "Approx 3 cm pendant",
-      "Fine metal chain",
-      "Hand polished",
-      "Store away from direct sun",
+      "BIS hallmarked gold",
+      "Purity confirmed before payment",
+      "Weight and making charges shared on WhatsApp",
+      "Arrives in a studio jewellery box",
     ],
     featured: true,
+  },
+  {
+    id: "silver-hoops",
+    slug: "silver-hoop-earrings",
+    name: "Silver hoop earrings",
+    category: "Jewellery",
+    price: null,
+    metal: "Silver",
+    hallmark: true,
+    art: { shape: "hoops", palette: "silver" },
+    image: null,
+    summary: "A pair of hallmarked silver hoops with a quiet, everyday curve.",
+    description:
+      "A clean pair of hoops in hallmarked silver, light enough to wear through the day. The surface is polished by hand, with a secure hinge and a soft click. Purity, weight, and making charges are confirmed on WhatsApp before payment.",
+    details: [
+      "BIS hallmarked silver",
+      "Sold as a pair",
+      "Purity confirmed before payment",
+      "Weight and making charges shared on WhatsApp",
+    ],
+    featured: true,
+  },
+  {
+    id: "gold-signet-ring",
+    slug: "gold-signet-ring",
+    name: "Gold signet ring",
+    category: "Jewellery",
+    price: null,
+    metal: "Gold",
+    hallmark: true,
+    art: { shape: "ring", palette: "gold" },
+    image: null,
+    summary: "A low, oval signet in hallmarked gold, with room for a quiet mark.",
+    description:
+      "A solid signet with a low oval face and a softly rounded band. Made in hallmarked gold and finished by hand, with the option to discuss a small engraving. Purity, weight, ring size, and making charges are confirmed on WhatsApp before payment.",
+    details: [
+      "BIS hallmarked gold",
+      "Ring size confirmed before making",
+      "Engraving discussed on WhatsApp",
+      "Weight and making charges shared before payment",
+    ],
+    featured: false,
+  },
+  {
+    id: "silver-bracelet",
+    slug: "silver-chain-bracelet",
+    name: "Silver chain bracelet",
+    category: "Jewellery",
+    price: null,
+    metal: "Silver",
+    hallmark: true,
+    art: { shape: "bracelet", palette: "silver" },
+    image: null,
+    summary: "A slim silver chain with a simple clasp, for a wrist that likes less.",
+    description:
+      "A fine chain bracelet in hallmarked silver, with a small lobster clasp and a short extension. It sits close to the wrist and layers easily with a watch. Purity, weight, and making charges are confirmed on WhatsApp before payment.",
+    details: [
+      "BIS hallmarked silver",
+      "Adjustable length discussed on WhatsApp",
+      "Purity confirmed before payment",
+      "Weight and making charges shared before payment",
+    ],
+    featured: false,
+  },
+  {
+    id: "gold-studs",
+    slug: "gold-stud-earrings",
+    name: "Gold stud earrings",
+    category: "Jewellery",
+    price: null,
+    metal: "Gold",
+    hallmark: true,
+    art: { shape: "studs", palette: "gold" },
+    image: null,
+    summary: "Small hallmarked gold studs, the pair that stays in for weeks.",
+    description:
+      "A pair of small gold studs with a soft, brushed face and a secure post. Quiet enough for every day and easy to keep in. Purity, weight, and making charges are confirmed on WhatsApp before payment.",
+    details: [
+      "BIS hallmarked gold",
+      "Sold as a pair",
+      "Purity confirmed before payment",
+      "Weight and making charges shared before payment",
+    ],
+    featured: false,
   },
 ];
 

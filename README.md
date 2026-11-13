@@ -2,7 +2,8 @@
 
 The storefront for Taaking Goods, a small batch resin studio in India. The site is built to show the work clearly, explain how an order happens, and hand the conversation to WhatsApp rather than pretending to be a checkout.
 
-Live pieces are not sold on the site. A visitor builds a bag, adds delivery details, and sends the order to the studio on WhatsApp. The studio confirms stock, shipping, and the final price before any payment.
+## Live pieces are not sold on the site. 
+A visitor builds a bag, adds delivery details, and sends the order to the studio on WhatsApp. The studio confirms stock, shipping, the final price, and for jewellery, the purity, weight, and making charges before any payment.
 
 ## Run it
 
@@ -35,6 +36,7 @@ Everything that is specific to the studio lives in a small number of files. You 
 | --- | --- |
 | `whatsapp` | Digits only, including country code. Example: `919876543210`. Until it is set, the site falls back to email and copyable order details. |
 | `instagram` | Full profile URL, or leave empty to hide the Instagram links. |
+| `facebook` | Full profile URL, or leave empty to hide the Facebook links. |
 | `email` | The address that should receive enquiries. |
 | `domain` | The canonical domain used by page metadata. |
 
@@ -49,7 +51,7 @@ Set the number and all of these paths switch to WhatsApp automatically.
 
 ### 2. Products: `src/data/catalog.js`
 
-Each entry has the following shape:
+Each entry has the following shape (for resin):
 
 ```js
 {
@@ -67,11 +69,35 @@ Each entry has the following shape:
 }
 ```
 
+For jewellery the entry also has:
+
+```js
+{
+  id: "hallmarked-gold-chain",
+  slug: "hallmarked-gold-chain",
+  name: "Hallmarked gold chain",
+  category: "Jewellery",
+  price: null,
+  metal: "Gold",
+  hallmark: true,
+  art: { shape: "chain", palette: "gold" },
+  summary: "A fine gold chain with a small bar pendant, made for every day.",
+  description: "A light chain in hallmarked gold, finished by hand and kept simple.",
+  details: [
+    "BIS hallmarked gold",
+    "Purity confirmed before payment",
+    "Weight and making charges shared on WhatsApp",
+    "Arrives in a studio jewellery box",
+  ],
+  featured: true
+}
+```
+
 To add a product, copy an entry and give it a unique `id` and `slug`. The category filter and related products update themselves.
 
 ### 3. Photographs
 
-The site currently uses original generated resin artwork so that it looks complete without stock imagery. When the real photographs are ready:
+The site currently uses generated artwork so it looks complete without stock imagery. When the real photographs are ready:
 
 1. Put the files in `public/images/`.
 2. Add `image: "/images/your-file.jpg"` to the product in `src/data/catalog.js`.
@@ -92,10 +118,13 @@ Studio story, process steps, care notes, FAQs, and the contact intro. The curren
 
 ### 5. Policies: `src/data/legal.js`
 
-Privacy, terms, and shipping and returns are drafted as reviewable starting points. Please have them checked against how the studio actually operates before launch. In particular:
+Privacy, terms, and shipping and returns are drafted as reviewable starting points. Please have them checked against how the studio actually operates before launch.
+
+In particular:
 
 - the 48 hour damage window;
-- the 7 day return window for unused ready pieces;
+- the 75% advance confirms / 30%-deduction return policy;
+- hallmarks and their significance;
 - the statement that custom and made to order pieces are not returnable;
 - the tax and accounting retention period in the privacy policy;
 - the governing law and liability wording.
@@ -107,59 +136,33 @@ These are placeholders in substance, even though they are written carefully.
 A few lines of sample copy sound like studio facts. Please confirm or rewrite them:
 
 - the studio is described only as "in India"; add a city if you want one;
-- "A few pieces are in the studio now" on the home page;
-- the 48 hour damage window and the 7 day return window;
+- the WhatsApp number is `+91 87083 58441` (digits `918708358441`);
+- Instagram: `taaking_goods`;
+- Facebook: `taakinggoods`;
+- email: `hello@taakinggoods.in`;
+- the 48 hour damage window and the new return rules (30% deduction, selected pieces only);
 - gift wrapping being confirmed on WhatsApp;
 - dispatch and delivery timelines;
-- the email address, domain, and Instagram handle.
+- the email address, domain, and social handles.
 
-Nothing on the site invents a price, review, customer count, award, or press mention.
+Nothing on the site invents a price, review, customer count, award, or press mention. The catalogue is clearly marked as a sample in the source, and every price reads **Price on enquiry** until real prices are supplied. This is better than a page full of numbers the studio has to walk back later.
 
 ### 7. Social preview: `public/og.png`
 
 The Open Graph image is already generated at 1200 × 630. Replace it when the photographs are ready, keeping the same dimensions and file name. Keep `og:image:width` and `og:image:height` in `index.html` in sync if you change the dimensions.
 
-## Project map
+### 8. Three.js / jewellery visual
 
-```
-src/
-  config.js              studio details and WhatsApp helpers
-  data/
-    catalog.js           products, categories, helpers
-    content.js           home, about, contact, FAQ copy
-    legal.js             policy drafts
-  pages/                 Home, Shop, Product, About, Contact, legal, 404
-  components/            nav, footer, bag, cursor, reveal, 3D stage, art
-  context/CartContext    bag state, persistence, totals
-  lib/                   price formatting, order message, clipboard, scrolling
-  hooks/                 page metadata, card tilt
-  styles/
-    tokens.css           colour, spacing, radius, type scale
-    base.css             reset, typography, shared primitives
-    components.css       nav, cards, bag, footer, 3D stage
-    pages.css            page layouts and responsive rules
-public/
-  images/                studio photographs (add your own)
-  og.png                 social preview
-  favicon.svg
-```
+The home page has one interactive 3D piece: a translucent amber torus knot. It can be dragged, respects `prefers-reduced-motion`, lazy loads, and falls back to generated artwork if WebGL is unavailable.
 
-## How the order flow works
+Jewellery pieces use generated metal artwork (`JewelleryArt.jsx`) kept separate from the resin `ResinArt.jsx`. Do not use resin shapes for hallmarked metal.
 
-1. A piece is added to the bag, which is persisted in `localStorage`.
-2. The bag asks for name, city, and a six digit pincode. The note is optional.
-3. With a WhatsApp number configured, **Send order on WhatsApp** opens `wa.me` with a formatted message.
-4. Without a number, **Copy order details** copies the same message so it can be pasted anywhere.
-5. No card details, no payment provider, no server. Nothing leaves the browser until the visitor sends the message.
-
-The message is assembled in `src/lib/order.js`. If you want to change its order or wording, that is the file.
-
-## Design notes
+### 9. Design notes
 
 - Light editorial direction: sand, stone, ink, olive, amber, clay.
 - One typeface, Manrope, with a named type scale in `tokens.css`.
 - Flat backgrounds. The only gradients are the heading text treatment and the resin artwork itself.
-- The home page has one interactive 3D piece: a translucent amber torus knot. It can be dragged, respects `prefers-reduced-motion`, lazy loads, and falls back to generated artwork if WebGL is unavailable.
+- The home page has one interactive 3D piece: a translucent amber torus knot.
 - The custom cursor is disabled on touch devices and when reduced motion is requested.
 - Reveal animations use `IntersectionObserver` and are skipped when reduced motion is requested.
 - Items that start below the fold stay available to crawlers and to browsers that do not run the animation.

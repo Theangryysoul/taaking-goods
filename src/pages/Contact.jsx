@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   ArrowUpRight,
   EnvelopeSimple,
+  FacebookLogo,
   InstagramLogo,
   PaperPlaneTilt,
   WhatsappLogo,
@@ -22,7 +23,7 @@ export default function Contact() {
   usePageMeta({
     title: "Contact",
     description:
-      "Ask the Taaking Goods studio about a custom resin piece, gifting, or an order. Write by email or message on WhatsApp.",
+      "Ask the Taaking Goods studio about a custom resin piece, hallmarked gold or silver jewellery, gifting, or an order. Write by email or message on WhatsApp.",
     path: "/contact",
   });
 
@@ -141,7 +142,26 @@ export default function Contact() {
                   <span className="contact-channel__body">
                     <span className="caption-4 contact-channel__label">Instagram</span>
                     <span className="title-3">See what is curing</span>
-                    <span className="caption-2">New pours leave the studio here first.</span>
+                    <span className="caption-2">New pours and jewellery leave the studio here first.</span>
+                  </span>
+                  <ArrowUpRight size={16} weight="regular" aria-hidden="true" />
+                </a>
+              )}
+
+              {site.facebook && (
+                <a
+                  className="contact-channel"
+                  href={site.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="contact-channel__icon" aria-hidden="true">
+                    <FacebookLogo size={20} weight="light" />
+                  </span>
+                  <span className="contact-channel__body">
+                    <span className="caption-4 contact-channel__label">Facebook</span>
+                    <span className="title-3">Follow the studio</span>
+                    <span className="caption-2">Studio updates, new pieces, and care notes.</span>
                   </span>
                   <ArrowUpRight size={16} weight="regular" aria-hidden="true" />
                 </a>
@@ -151,8 +171,9 @@ export default function Contact() {
             <div className="contact-note">
               <p className="eyebrow">For a custom piece</p>
               <p className="body-3">
-                Include the size, colour, quantity, and the date you need it by. A reference
-                image helps too. We will reply with what is possible, and what it will cost.
+                For resin, include the size, colour, quantity, and the date you need it by. For
+                jewellery, include the metal, purity, size, and any reference. A reference image
+                helps too. We will reply with what is possible, and what it will cost.
               </p>
             </div>
 

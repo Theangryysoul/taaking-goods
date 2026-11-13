@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "@phosphor-icons/react";
-import ResinArt from "./ResinArt";
+import ProductArt from "./ProductArt";
 import { useTilt } from "../hooks/useTilt";
 import { formatPrice } from "../lib/format";
 
@@ -18,7 +18,12 @@ export default function ProductCard({ product }) {
           {product.image ? (
             <img src={product.image} alt={product.name} loading="lazy" decoding="async" />
           ) : (
-            <ResinArt shape={product.art.shape} palette={product.art.palette} />
+            <ProductArt product={product} />
+          )}
+          {product.hallmark && (
+            <span className="product-card__badge">
+              Hallmarked {product.metal ? product.metal.toLowerCase() : "metal"}
+            </span>
           )}
           <span className="product-card__cue" aria-hidden="true">
             <ArrowUpRight size={16} weight="regular" />

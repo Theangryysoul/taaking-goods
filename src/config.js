@@ -3,18 +3,19 @@
 //
 // WhatsApp number: digits only, including the country code.
 // Example: "919876543210". Leave it empty until the studio line is live.
-// Instagram: full profile URL, or leave empty to hide the link.
+// Instagram and Facebook: full profile URLs, or leave empty to hide the link.
 // ---------------------------------------------------------------------------
 
 export const site = {
   name: "Taaking Goods",
   wordmark: "taaking goods",
-  tagline: "Hand poured resin objects",
+  tagline: "Hand poured resin objects and hallmarked jewellery",
   description:
-    "Hand poured resin objects for the table, the shelf, and the people you keep close. A small batch studio in India.",
+    "Hand poured resin objects and hallmarked gold and silver jewellery. A small batch studio in India.",
   email: "hello@taakinggoods.in",
-  whatsapp: "",
-  instagram: "",
+  whatsapp: "918708358441",
+  instagram: "https://www.instagram.com/taaking_goods/",
+  facebook: "https://www.facebook.com/taakinggoods",
   domain: "https://taakinggoods.in",
   country: "India",
 };
