@@ -12,7 +12,7 @@ export const site = {
   tagline: "Hand poured resin objects and hallmarked jewellery",
   description:
     "Hand poured resin objects and hallmarked gold and silver jewellery. A small batch studio in India.",
-  email: "hello@taakinggoods.in",
+  email: "taakinggoods@gmail.com",
   whatsapp: "918708358441",
   instagram: "https://www.instagram.com/taaking_goods/",
   facebook: "https://www.facebook.com/taakinggoods",

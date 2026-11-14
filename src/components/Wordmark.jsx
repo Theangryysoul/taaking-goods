@@ -1,11 +1,16 @@
+// The studio logo. One component so the nav, mobile menu, and footer all stay
+// in sync. Swap `public/logo.png` to update it everywhere.
 export default function Wordmark({ wordmark = "taaking goods" }) {
   return (
     <span className="brand">
-      <svg className="brand__mark" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="9.2" cy="12" r="6.8" fill="#C88A48" />
-        <circle cx="14.8" cy="12" r="6.8" fill="#55604A" fillOpacity="0.88" />
-        <circle cx="12" cy="12" r="2.4" fill="#F3EFE6" fillOpacity="0.55" />
-      </svg>
+      <img
+        className="brand__logo"
+        src="/logo.png"
+        alt={`${wordmark} logo`}
+        width={44}
+        height={44}
+        decoding="async"
+      />
       <span className="brand__word">{wordmark}</span>
     </span>
   );

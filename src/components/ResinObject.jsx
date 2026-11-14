@@ -8,9 +8,9 @@ function shadowTexture() {
   canvas.height = 256;
   const ctx = canvas.getContext("2d");
   const gradient = ctx.createRadialGradient(128, 128, 8, 128, 128, 126);
-  gradient.addColorStop(0, "rgba(35, 29, 18, 0.42)");
-  gradient.addColorStop(0.55, "rgba(35, 29, 18, 0.16)");
-  gradient.addColorStop(1, "rgba(35, 29, 18, 0)");
+  gradient.addColorStop(0, "rgba(0, 0, 0, 0.5)");
+  gradient.addColorStop(0.55, "rgba(0, 0, 0, 0.18)");
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 256, 256);
   const texture = new THREE.CanvasTexture(canvas);
@@ -45,10 +45,10 @@ export default function ResinObject() {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
-    renderer.setClearColor(0xe4dac7, 1);
+    renderer.setClearColor(0x0b0f14, 1);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xe4dac7);
+    scene.background = new THREE.Color(0x0b0f14);
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
     camera.position.set(0, 0.15, 8.4);
@@ -59,9 +59,9 @@ export default function ResinObject() {
     const envTexture = pmrem.fromScene(environment, 0.04).texture;
     scene.environment = envTexture;
 
-    const key = new THREE.DirectionalLight(0xfff1d8, 2.8);
+    const key = new THREE.DirectionalLight(0xd8fbfc, 2.8);
     key.position.set(4, 5.5, 5);
-    const rim = new THREE.DirectionalLight(0xd7e2cf, 2.2);
+    const rim = new THREE.DirectionalLight(0x20c4c7, 2.2);
     rim.position.set(-5, -2.5, -4);
     const fill = new THREE.DirectionalLight(0xffffff, 1);
     fill.position.set(-3, 3, 4);
@@ -71,13 +71,13 @@ export default function ResinObject() {
     geometry.center();
 
     const material = new THREE.MeshPhysicalMaterial({
-      color: 0xf3d3a2,
+      color: 0xbdeef0,
       metalness: 0,
       roughness: 0.09,
       transmission: 1,
       thickness: 1.35,
       ior: 1.49,
-      attenuationColor: new THREE.Color(0xd08b46),
+      attenuationColor: new THREE.Color(0x0e6b72),
       attenuationDistance: 2.6,
       clearcoat: 1,
       clearcoatRoughness: 0.05,

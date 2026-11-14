@@ -45,7 +45,7 @@ export const privacy = {
     {
       heading: "Contact",
       paragraphs: [
-        "For any privacy question, write to hello@taakinggoods.in. If the details above change, the updated policy will appear on this page.",
+        "For any privacy question, write to taakinggoods@gmail.com. If the details above change, the updated policy will appear on this page.",
       ],
     },
   ],
@@ -182,7 +182,7 @@ export const shipping = {
     {
       heading: "Questions",
       paragraphs: [
-        "Write to hello@taakinggoods.in with your order details and we will look into it.",
+        "Write to taakinggoods@gmail.com with your order details and we will look into it.",
       ],
     },
   ],

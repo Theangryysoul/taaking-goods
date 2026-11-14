@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowUp, FacebookLogo, InstagramLogo, WhatsappLogo } from "@phosphor-icons/react";
+import { ArrowUp, FacebookLogo, InstagramLogo } from "@phosphor-icons/react";
 import Wordmark from "./Wordmark";
-import { hasWhatsApp, site, whatsappUrl } from "../config";
+import { site } from "../config";
 import { scrollToTop } from "../lib/scroll";
 
 export default function Footer() {
@@ -19,28 +19,6 @@ export default function Footer() {
             </p>
             <div className="footer-contact">
               <a href={`mailto:${site.email}`}>{site.email}</a>
-              {hasWhatsApp() && (
-                <a
-                  href={whatsappUrl("Hello Taaking Goods, I have a question.")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <WhatsappLogo size={15} aria-hidden="true" />
-                  WhatsApp
-                </a>
-              )}
-              {site.instagram && (
-                <a href={site.instagram} target="_blank" rel="noreferrer">
-                  <InstagramLogo size={15} aria-hidden="true" />
-                  Instagram
-                </a>
-              )}
-              {site.facebook && (
-                <a href={site.facebook} target="_blank" rel="noreferrer">
-                  <FacebookLogo size={15} aria-hidden="true" />
-                  Facebook
-                </a>
-              )}
             </div>
           </div>
 
@@ -80,6 +58,34 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p className="caption-2">© 2026 {site.name}. All rights reserved.</p>
+
+          <div className="footer-social">
+            {site.instagram && (
+              <a
+                href={site.instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Taaking Goods on Instagram"
+                className="footer-social__link"
+              >
+                <InstagramLogo size={18} weight="light" aria-hidden="true" />
+                <span className="footer-social__label">Instagram</span>
+              </a>
+            )}
+            {site.facebook && (
+              <a
+                href={site.facebook}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Taaking Goods on Facebook"
+                className="footer-social__link"
+              >
+                <FacebookLogo size={18} weight="light" aria-hidden="true" />
+                <span className="footer-social__label">Facebook</span>
+              </a>
+            )}
+          </div>
+
           <p className="caption-2">Made in {site.country}.</p>
           <button
             type="button"

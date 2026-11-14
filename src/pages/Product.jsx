@@ -38,7 +38,7 @@ function ProductView({ product }) {
 
   return (
     <>
-      <section className="product-page">
+      <section className="product-page" data-category={product.category}>
         <div className="container">
           <nav className="breadcrumb" aria-label="Breadcrumb">
             <Link to="/shop">Shop</Link>

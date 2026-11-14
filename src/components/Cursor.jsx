@@ -24,9 +24,12 @@ export default function Cursor() {
     let ringY = targetY;
     let frame = 0;
 
+    // Faster interpolation for more responsive cursor (0.3 instead of 0.18)
+    const INTERPOLATION = 0.3;
+
     const loop = () => {
-      ringX += (targetX - ringX) * 0.18;
-      ringY += (targetY - ringY) * 0.18;
+      ringX += (targetX - ringX) * INTERPOLATION;
+      ringY += (targetY - ringY) * INTERPOLATION;
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
       dot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
       label.style.transform = `translate3d(${targetX + 16}px, ${targetY + 18}px, 0)`;
@@ -54,6 +57,8 @@ export default function Cursor() {
       const target = event.target.closest(
         "a, button, [data-cursor], summary, input, textarea, select, label",
       );
+
+      // REMOVED: Skip custom cursor over navbar - now works everywhere
 
       if (!target) {
         show();

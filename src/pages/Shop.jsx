@@ -4,7 +4,9 @@ import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
 import Reveal from "../components/Reveal";
 import ProductCard from "../components/ProductCard";
 import ResinArt from "../components/ResinArt";
+import JewelleryArt from "../components/JewelleryArt";
 import { categories, products } from "../data/catalog";
+import { jewellery } from "../data/content";
 import { usePageMeta } from "../hooks/usePageMeta";
 
 export default function Shop() {
@@ -38,7 +40,9 @@ export default function Shop() {
     <>
       <section className="page-head shop-head">
         <div className="container">
-          <p className="eyebrow">Shop</p>
+          <p className={`eyebrow${category !== "All" ? " shop-eyebrow" : ""}`} data-category={category !== "All" ? category : ""}>
+            {category !== "All" ? category : "Shop"}
+          </p>
           <div className="shop-head__row">
             <h1 className="heading-1 page-title">The studio shelf.</h1>
             <p className="body-2 shop-head__intro">
@@ -56,6 +60,7 @@ export default function Shop() {
                   className={`filter${category === item ? " is-active" : ""}`}
                   aria-pressed={category === item}
                   onClick={() => chooseCategory(item)}
+                  data-category={item}
                 >
                   {item}
                 </button>
@@ -68,8 +73,26 @@ export default function Shop() {
         </div>
       </section>
 
-      <section className="section shop-list">
+      <section className="section shop-list" data-category={category}>
         <div className="container">
+          {category === "Jewellery" && (
+            <Reveal className="jewellery-note">
+              <div className="jewellery-note__body">
+                <p className="eyebrow">{jewellery.eyebrow}</p>
+                <h2 className="heading-3 jewellery-note__title">{jewellery.title}</h2>
+                <p className="body-3 jewellery-note__intro">{jewellery.intro}</p>
+                <ul className="jewellery-note__list">
+                  {jewellery.notes.map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="jewellery-note__art" aria-hidden="true">
+                <JewelleryArt shape="chain" palette="gold" />
+              </div>
+            </Reveal>
+          )}
+
           {shown.length > 0 ? (
             <div className="product-grid" key={category}>
               {shown.map((product, index) => (
@@ -97,10 +120,12 @@ export default function Shop() {
 
           <div className="shop-note">
             <p className="body-5">
-              Prices are confirmed on WhatsApp before payment. Shipping is quoted by pincode.
+              {category === "Jewellery"
+                ? "Gold and silver prices are confirmed on WhatsApp with purity, weight, and making charges. A 75% advance confirms the order."
+                : "Prices are confirmed on WhatsApp before payment. A 75% advance confirms the order; shipping is quoted by pincode."}
             </p>
             <Link className="link-arrow" to="/contact">
-              Ask about a custom pour
+              {category === "Jewellery" ? "Ask about a piece" : "Ask about a custom pour"}
               <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
             </Link>
           </div>

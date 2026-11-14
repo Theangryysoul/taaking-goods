@@ -1,26 +1,53 @@
 :root {
-  --sand-0: #fbf8f2;
-  --sand-50: #f3efe6;
-  --sand-100: #ebe4d6;
-  --sand-200: #e0d6c4;
-  --stone-300: #cfc2ab;
-  --stone-400: #b8a88d;
+  /* Taaking Goods — Teal Luxe brand palette (primary) -----------------------
+     Charcoal #0B0F14 background · Deep Teal #0E6B72 primary ·
+     Aqua #20C4C7 accent/CTA · Silver #D1D5DB text/icons · Ivory #F6F7F5 text.
+     Gold tones (--gold-*) are reserved for the jewellery category only. */
 
-  --ink-900: #191811;
-  --ink-800: #25231b;
-  --ink-700: #3a372d;
-  --muted: #625b4e;
-  --line: rgba(25, 24, 17, 0.13);
-  --line-strong: rgba(25, 24, 17, 0.22);
+  /* Surfaces (legacy sand names, now dark) */
+  --sand-0: #0b0f14;   /* page background — charcoal */
+  --sand-50: #10161c;  /* lifted surface: cards, panels, drawer */
+  --sand-100: #1a2127; /* surface-2: inputs, hover fills */
+  --sand-200: #284046; /* deep teal-slate accent surface */
+  --stone-300: #2e3a41;
+  --stone-400: #3e8e93;
 
-  --olive: #4e5944;
-  --amber: #c88a48;
-  --clay: #a65c3b;
-  --danger: #8e3324;
+  /* Text (legacy ink names, now light) */
+  --ink-900: #f6f7f5;  /* ivory — primary text, inverted fills */
+  --ink-800: #e2e7ea;
+  --ink-700: #d1d5db;  /* silver — secondary text, icons */
+  --muted: #8a959c;
 
-  --dark: #131209;
-  --dark-soft: #1f1d14;
-  --stage: #e4dac7;
+  --line: rgba(209, 213, 219, 0.14);
+  --line-strong: rgba(209, 213, 219, 0.3);
+
+  /* Brand accents */
+  --teal: #0e6b72;      /* primary */
+  --teal-deep: #0a4d52;
+  --aqua: #20c4c7;      /* accent / CTA */
+  --aqua-soft: #b8eef1;
+
+  /* Jewellery-only golds (never use outside the jewellery category) */
+  --gold: #d4b47c;       /* champagne gold */
+  --gold-soft: #e8d3a8;
+  --gold-deep: #9c7c3c;  /* midnight gold */
+
+  /* Per-category accents — each shelf keeps its own hue */
+  --cat-tableware: #1d9aa2;  /* teal */
+  --cat-decor: #4aa383;      /* emerald */
+  --cat-gifting: #58a6c6;    /* ocean blue */
+  /* Jewellery uses --gold above */
+
+  /* Legacy accent names remapped to the brand */
+  --olive: #20c4c7;      /* focus rings, dots, link hovers → aqua */
+  --amber: #20c4c7;
+  --clay: #0e6b72;
+  --danger: #f08a7b;
+
+  /* Deep panels */
+  --dark: #0e2226;      /* material/care band — deep teal */
+  --dark-soft: #14262b;
+  --stage: #10161c;     /* 3D hero stage */
 
   --font: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -46,7 +73,7 @@
   --radius-pill: 9999px;
 
   --container: 1280px;
-  --shadow-soft: 0 24px 70px rgba(25, 24, 17, 0.09);
+  --shadow-soft: 0 24px 70px rgba(0, 0, 0, 0.45);
 }
 
 /* Type scale and named text styles */

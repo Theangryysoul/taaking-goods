@@ -1,9 +1,25 @@
 # Taaking Goods
 
-The storefront for Taaking Goods, a small batch resin studio in India. The site is built to show the work clearly, explain how an order happens, and hand the conversation to WhatsApp rather than pretending to be a checkout.
+The storefront for Taaking Goods, a small batch resin studio in India with a separate hallmarked gold and silver jewellery collection. The site is built to show the work clearly, explain how an order happens, and hand the conversation to WhatsApp rather than pretending to be a checkout.
 
-## Live pieces are not sold on the site. 
-A visitor builds a bag, adds delivery details, and sends the order to the studio on WhatsApp. The studio confirms stock, shipping, the final price, and for jewellery, the purity, weight, and making charges before any payment.
+Live pieces are not sold on the site. A visitor builds a bag, adds delivery details, and sends the order to the studio on WhatsApp. The studio confirms stock, shipping, the final price, and for jewellery, the purity, weight, and making charges before any payment.
+
+## Brand theme: Teal Luxe (dark)
+
+The site uses the studio's Teal Luxe brand board (`Taaking Goods Teal Luxe Brand Board.png`):
+
+| Role | Colour | Token |
+| --- | --- | --- |
+| Background | Charcoal `#0B0F14` | `--sand-0` |
+| Primary | Deep Teal `#0E6B72` | `--teal` |
+| Accent / CTA | Aqua `#20C4C7` | `--aqua` |
+| Text / icons | Silver `#D1D5DB` | `--ink-700` |
+| Text (bright) | Ivory `#F6F7F5` | `--ink-900` |
+| Surfaces | `#10161C`, `#1A2127`, `#284046` | `--sand-50/100/200` |
+
+**Jewellery-only golds** — champagne gold `#D4B47C` (`--gold`) and midnight gold `#9C7C3C` (`--gold-deep`) are used *only* inside the jewellery category: card badges, the product hallmark note, the shop jewellery panel, and the home jewellery band. Resin sections stay teal/aqua. Do not use the gold tokens outside jewellery contexts.
+
+The logo (`Taaking Goods Logo.png`, copied to `public/logo.png`) is used in the nav, footer, favicon, social preview, and structured data. Swap `public/logo.png` to update it everywhere at once (`src/components/Wordmark.jsx` renders it).
 
 ## Run it
 
@@ -32,13 +48,13 @@ Everything that is specific to the studio lives in a small number of files. You 
 
 ### 1. Studio details: `src/config.js`
 
-| Field | What to do |
-| --- | --- |
-| `whatsapp` | Digits only, including country code. Example: `919876543210`. Until it is set, the site falls back to email and copyable order details. |
-| `instagram` | Full profile URL, or leave empty to hide the Instagram links. |
-| `facebook` | Full profile URL, or leave empty to hide the Facebook links. |
-| `email` | The address that should receive enquiries. |
-| `domain` | The canonical domain used by page metadata. |
+| Field       | What to do                                                                                                                              |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `whatsapp`  | Digits only, including country code. Set to `918708358441`. WhatsApp receives orders; it is not shown as a social link.                |
+| `instagram` | `https://www.instagram.com/taaking_goods/` — footer and contact page.                                                                    |
+| `facebook`  | `https://www.facebook.com/taakinggoods` — footer and contact page.                                                                       |
+| `email`     | `taakinggoods@gmail.com` — footer and contact page.                                                                                      |
+| `domain`    | The canonical domain used by page metadata.                                                                                             |
 
 When `whatsapp` is empty:
 
@@ -139,7 +155,7 @@ A few lines of sample copy sound like studio facts. Please confirm or rewrite th
 - the WhatsApp number is `+91 87083 58441` (digits `918708358441`);
 - Instagram: `taaking_goods`;
 - Facebook: `taakinggoods`;
-- email: `hello@taakinggoods.in`;
+- email: `taakinggoods@gmail.com`;
 - the 48 hour damage window and the new return rules (30% deduction, selected pieces only);
 - gift wrapping being confirmed on WhatsApp;
 - dispatch and delivery timelines;
@@ -147,22 +163,23 @@ A few lines of sample copy sound like studio facts. Please confirm or rewrite th
 
 Nothing on the site invents a price, review, customer count, award, or press mention. The catalogue is clearly marked as a sample in the source, and every price reads **Price on enquiry** until real prices are supplied. This is better than a page full of numbers the studio has to walk back later.
 
-### 7. Social preview: `public/og.png`
+### 7. Social preview: `public/logo.png`
 
-The Open Graph image is already generated at 1200 × 630. Replace it when the photographs are ready, keeping the same dimensions and file name. Keep `og:image:width` and `og:image:height` in `index.html` in sync if you change the dimensions.
+The Open Graph and Twitter preview images point at the studio logo (`public/logo.png`). Replace it with a 1200 × 630 branded banner when one is ready, and update the `og:image` / `twitter:image` paths in `index.html` to match.
 
 ### 8. Three.js / jewellery visual
 
-The home page has one interactive 3D piece: a translucent amber torus knot. It can be dragged, respects `prefers-reduced-motion`, lazy loads, and falls back to generated artwork if WebGL is unavailable.
+The home page has one interactive 3D piece: a translucent deep-teal torus knot on the charcoal stage, matching the brand board's hero. It can be dragged, respects `prefers-reduced-motion`, lazy loads, and falls back to generated artwork if WebGL is unavailable.
 
 Jewellery pieces use generated metal artwork (`JewelleryArt.jsx`) kept separate from the resin `ResinArt.jsx`. Do not use resin shapes for hallmarked metal.
 
 ### 9. Design notes
 
-- Light editorial direction: sand, stone, ink, olive, amber, clay.
+- Dark Teal Luxe direction: charcoal background, deep teal primary, aqua CTA, silver/ivory text (see the brand table at the top).
+- Jewellery category carries its own champagne/midnight gold accents; resin stays teal/aqua.
 - One typeface, Manrope, with a named type scale in `tokens.css`.
-- Flat backgrounds. The only gradients are the heading text treatment and the resin artwork itself.
-- The home page has one interactive 3D piece: a translucent amber torus knot.
+- Flat surfaces. The only gradients are the heading text treatment, the aqua CTA fill, and the product artwork itself.
+- The home page has one interactive 3D piece: a translucent deep-teal torus knot.
 - The custom cursor is disabled on touch devices and when reduced motion is requested.
 - Reveal animations use `IntersectionObserver` and are skipped when reduced motion is requested.
 - Items that start below the fold stay available to crawlers and to browsers that do not run the animation.

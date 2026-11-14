@@ -137,6 +137,7 @@ p {
 }
 
 .page {
+  position: relative;
   animation: page-in 0.6s var(--ease) both;
 }
 
@@ -170,7 +171,7 @@ p {
 
 .hero-title,
 .page-title {
-  background: linear-gradient(90deg, #000000 0%, #666666 100%);
+  background: linear-gradient(90deg, #f6f7f5 0%, #8a959c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -224,13 +225,13 @@ p {
 }
 
 .link-arrow--light {
-  color: var(--sand-100);
-  border-color: rgba(243, 239, 230, 0.3);
+  color: var(--ink-700);
+  border-color: rgba(209, 213, 219, 0.3);
 }
 
 .link-arrow--light:hover {
-  color: var(--sand-0);
-  border-color: var(--sand-0);
+  color: var(--ink-900);
+  border-color: var(--ink-900);
 }
 
 .btn {
@@ -267,12 +268,12 @@ p {
 }
 
 .btn--primary {
-  background: var(--ink-900);
-  color: var(--sand-0);
+  background: linear-gradient(135deg, #23d3d6 0%, #0e6b72 100%);
+  color: #0b0f14;
 }
 
 .btn--primary:hover {
-  background: var(--ink-700);
+  background: linear-gradient(135deg, #2fe0e3 0%, #0e7d85 100%);
 }
 
 .btn--line {

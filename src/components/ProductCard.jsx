@@ -8,7 +8,7 @@ export default function ProductCard({ product }) {
   const tiltRef = useTilt(3.2);
 
   return (
-    <article className="product-card" ref={tiltRef} data-cursor="View">
+    <article className="product-card" ref={tiltRef} data-cursor="View" data-category={product.category}>
       <Link
         className="product-card__link"
         to={`/shop/${product.slug}`}

@@ -15,8 +15,9 @@ import ProductCard from "../components/ProductCard";
 import TaglineReveal from "../components/TaglineReveal";
 import Accordion from "../components/Accordion";
 import ResinArt from "../components/ResinArt";
+import JewelleryArt from "../components/JewelleryArt";
 import { featuredProducts, products } from "../data/catalog";
-import { care, faqs, process, trust } from "../data/content";
+import { care, faqs, jewellery, process, trust } from "../data/content";
 import { usePageMeta } from "../hooks/usePageMeta";
 
 const trustIcons = {
@@ -138,6 +139,34 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="jewellery-band" aria-labelledby="jewellery-band-title">
+        <div className="container jewellery-band__grid">
+          <Reveal>
+            <p className="eyebrow">{jewellery.eyebrow}</p>
+            <h2 className="heading-2 jewellery-band__title" id="jewellery-band-title">
+              {jewellery.title}
+            </h2>
+            <p className="body-3 jewellery-band__intro">{jewellery.intro}</p>
+            <div className="jewellery-band__actions">
+              <Link className="btn jewellery-band__btn" to="/shop?category=Jewellery">
+                View the jewellery
+                <ArrowRight size={16} weight="regular" aria-hidden="true" />
+              </Link>
+              <Link className="link-arrow" to="/shop">
+                Browse resin pieces
+                <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
+              </Link>
+            </div>
+          </Reveal>
+          <Reveal className="jewellery-band__art" delay={100}>
+            <JewelleryArt shape="hoops" palette="gold" />
+            <span className="jewellery-band__caption">
+              Hallmarked gold and silver
+            </span>
+          </Reveal>
         </div>
       </section>
 

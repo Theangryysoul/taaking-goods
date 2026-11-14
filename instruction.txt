@@ -1,0 +1,6 @@
+
+1. add logo on top left corner with name (not in navbar)
+2. in navbar remove taaking goods and logo
+3. every category like tableware, decor, gifting should have a little different theme color from one another
+4. under instagram and facebook logo write text Instagram and Facebook respectively
+5. fix all cursor issues like, it's skipping many components like navbar and other, not visible above bag card component, it's opaque and slow (should be transparent)

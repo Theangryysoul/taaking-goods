@@ -1,9 +1,12 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
 import Cursor from "./components/Cursor";
 import SmoothScroll from "./components/SmoothScroll";
+import Wordmark from "./components/Wordmark";
+import { site } from "./config";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import Product from "./pages/Product";
@@ -29,6 +32,26 @@ export default function App() {
 
       <main id="main" className="site-main" tabIndex={-1}>
         <div className="page" key={location.pathname}>
+          <div className="site-brand">
+            <Link
+              to="/"
+              className="site-logo"
+              aria-label={`${site.name} home`}
+            >
+              <Wordmark wordmark={site.wordmark} />
+            </Link>
+
+            <Link to="/shop" className="site-tagline">
+              <span className="caption-5 site-tagline__text">
+                Hallmarked gold and silver, hand poured resin.
+              </span>
+              <span className="caption-3 site-tagline__cta">
+                Tap to view the catalogue
+                <ArrowUpRight size={13} weight="regular" aria-hidden="true" />
+              </span>
+            </Link>
+          </div>
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />

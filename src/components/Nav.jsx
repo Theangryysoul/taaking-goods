@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ShoppingBag, ArrowUpRight, EnvelopeSimple, WhatsappLogo } from "@phosphor-icons/react";
-import Wordmark from "./Wordmark";
 import { useCart } from "../context/CartContext";
 import { hasWhatsApp, site, whatsappUrl } from "../config";
 import { startScroll, stopScroll } from "../lib/scroll";
 
 const links = [
+  { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
   { to: "/shop?category=Jewellery", label: "Jewellery", category: "Jewellery" },
   { to: "/about", label: "Studio" },
@@ -88,10 +88,6 @@ export default function Nav() {
   return (
     <header className="site-nav">
       <div className={`nav-pill${open ? " is-open" : ""}`}>
-        <Link to="/" className="nav-brand" onClick={closeMenu} aria-label="Taaking Goods home">
-          <Wordmark wordmark={site.wordmark} />
-        </Link>
-
         <nav className="nav-links" aria-label="Primary">
           {links.map((link) => (
             <Link
