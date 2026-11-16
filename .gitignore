@@ -2,7 +2,16 @@ node_modules/
 dist/
 .tmp/
 .env
-.env.local
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 .DS_Store
 Thumbs.db
 *.log
+playwright-report/
+test-results/
+coverage/
+supabase/.temp/
+supabase/.branches/

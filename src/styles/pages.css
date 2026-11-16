@@ -478,30 +478,59 @@
   color: var(--sand-0);
 }
 
-/* Each category carries a slightly different accent */
+/* The shop background and active filter follow the selected category.
+   Each shelf keeps its own hue, layered as a radial wash plus a diagonal
+   linear base that stays on the site's charcoal/teal-luxe surfaces. */
 
-.shop-list[data-category="Tableware"] .filter.is-active {
-  border-color: var(--cat-tableware);
-  background: var(--cat-tableware);
-  color: #0b0f14;
+.shop-page {
+  --shop-accent: var(--aqua);
+  --shop-category-rgb: 32, 196, 199;
+  background:
+    radial-gradient(90% 38rem at 100% 0%, rgba(var(--shop-category-rgb), 0.16) 0%, transparent 70%),
+    radial-gradient(60% 36rem at 0% 24%, rgba(var(--shop-category-rgb), 0.08) 0%, transparent 72%),
+    linear-gradient(180deg, var(--sand-0) 0%, var(--sand-50) 48%, var(--sand-0) 100%);
 }
 
-.shop-list[data-category="Decor"] .filter.is-active {
-  border-color: var(--cat-decor);
-  background: var(--cat-decor);
-  color: #0b0f14;
+.shop-page[data-category="Tableware"] {
+  --shop-accent: var(--cat-tableware);
+  --shop-category-rgb: 29, 154, 162;
+  background:
+    radial-gradient(90% 40rem at 100% 0%, rgba(29, 154, 162, 0.24) 0%, transparent 68%),
+    radial-gradient(60% 34rem at 0% 30%, rgba(232, 211, 168, 0.06) 0%, transparent 72%),
+    linear-gradient(145deg, #0a2024 0%, var(--sand-50) 46%, var(--sand-0) 100%);
 }
 
-.shop-list[data-category="Gifting"] .filter.is-active {
-  border-color: var(--cat-gifting);
-  background: var(--cat-gifting);
-  color: #0b0f14;
+.shop-page[data-category="Decor"] {
+  --shop-accent: var(--cat-decor);
+  --shop-category-rgb: 74, 163, 131;
+  background:
+    radial-gradient(90% 40rem at 100% 0%, rgba(74, 163, 131, 0.22) 0%, transparent 68%),
+    radial-gradient(60% 34rem at 0% 30%, rgba(32, 196, 199, 0.07) 0%, transparent 72%),
+    linear-gradient(145deg, #0b1f1c 0%, var(--sand-50) 46%, var(--sand-0) 100%);
 }
 
-.shop-list[data-category="Jewellery"] .filter.is-active {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: #141009;
+.shop-page[data-category="Gifting"] {
+  --shop-accent: var(--cat-gifting);
+  --shop-category-rgb: 88, 166, 198;
+  background:
+    radial-gradient(90% 40rem at 100% 0%, rgba(88, 166, 198, 0.22) 0%, transparent 68%),
+    radial-gradient(60% 34rem at 0% 30%, rgba(216, 238, 250, 0.06) 0%, transparent 72%),
+    linear-gradient(145deg, #0b1a26 0%, var(--sand-50) 46%, var(--sand-0) 100%);
+}
+
+.shop-page[data-category="Jewellery"] {
+  --shop-accent: var(--gold);
+  --shop-category-rgb: 212, 180, 124;
+  background:
+    radial-gradient(85% 42rem at 100% 0%, rgba(232, 211, 168, 0.22) 0%, transparent 68%),
+    radial-gradient(70% 42rem at 0% 38%, rgba(156, 124, 60, 0.14) 0%, transparent 74%),
+    linear-gradient(145deg, #17130d 0%, #21190f 40%, #101419 100%);
+}
+
+.shop-page[data-category]:not([data-category="All"]) .filter.is-active {
+  border-color: var(--shop-accent);
+  background: linear-gradient(135deg, var(--shop-accent), rgba(var(--shop-category-rgb), 0.78));
+  color: #0b0f14;
 }
 
 /* Category theme for shop eyebrow */
@@ -547,13 +576,7 @@
   max-width: 560px;
 }
 
-/* Jewellery category — gold theme, separate from the resin teal */
-
-.shop-list[data-category="Jewellery"] .filter.is-active {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: #141009;
-}
+/* Jewellery category — rich champagne gold, separate from the resin teal */
 
 .jewellery-note {
   display: grid;
@@ -562,11 +585,14 @@
   align-items: center;
   margin-bottom: var(--space-700);
   padding: var(--space-600);
-  border: 1px solid rgba(212, 180, 124, 0.35);
+  border: 1px solid rgba(212, 180, 124, 0.55);
   border-radius: var(--radius-xl);
   background:
-    radial-gradient(120% 140% at 85% 10%, rgba(212, 180, 124, 0.14) 0%, rgba(212, 180, 124, 0) 55%),
-    var(--sand-50);
+    radial-gradient(110% 140% at 90% 0%, rgba(232, 211, 168, 0.22) 0%, transparent 58%),
+    linear-gradient(135deg, rgba(156, 124, 60, 0.2) 0%, rgba(16, 22, 28, 0.96) 52%, rgba(212, 180, 124, 0.1) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(232, 211, 168, 0.12),
+    0 24px 70px rgba(0, 0, 0, 0.28);
 }
 
 .jewellery-note__body .eyebrow {
@@ -639,10 +665,12 @@
 
 .jewellery-band {
   padding-block: var(--space-900);
-  border-block: 1px solid rgba(212, 180, 124, 0.22);
+  border-block: 1px solid rgba(212, 180, 124, 0.38);
   background:
-    radial-gradient(90% 130% at 100% 0%, rgba(212, 180, 124, 0.1) 0%, rgba(212, 180, 124, 0) 55%),
-    var(--sand-50);
+    radial-gradient(90% 140% at 100% 0%, rgba(232, 211, 168, 0.18) 0%, transparent 58%),
+    radial-gradient(65% 120% at 0% 100%, rgba(156, 124, 60, 0.12) 0%, transparent 70%),
+    linear-gradient(135deg, #17130d 0%, #21190f 48%, #101419 100%);
+  box-shadow: inset 0 1px 0 rgba(232, 211, 168, 0.06);
 }
 
 .jewellery-band__grid {

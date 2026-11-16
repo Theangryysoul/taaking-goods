@@ -6,7 +6,7 @@ export function buildOrderMessage(lines, fields, subtotal) {
   );
 
   const total =
-    subtotal === null ? "To be confirmed on WhatsApp" : `₹${subtotal.toLocaleString("en-IN")}`;
+    subtotal === null ? "To be confirmed on WhatsApp" : formatPrice(subtotal);
 
   return [
     "Hello Taaking Goods, I would like to place an order.",

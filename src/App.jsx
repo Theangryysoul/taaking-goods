@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import Nav from "./components/Nav";
@@ -17,7 +18,18 @@ import Terms from "./pages/Terms";
 import Shipping from "./pages/Shipping";
 import NotFound from "./pages/NotFound";
 
+const AdminApp = lazy(() => import("./pages/admin/AdminApp"));
+
 export default function App() {
+  return (
+    <Routes>
+      <Route path="/admin/*" element={<Suspense fallback={<div className="container section" role="status">Loading owner panel…</div>}><AdminApp /></Suspense>} />
+      <Route path="*" element={<Storefront />} />
+    </Routes>
+  );
+}
+
+function Storefront() {
   const location = useLocation();
 
   return (

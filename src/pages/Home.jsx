@@ -16,7 +16,8 @@ import TaglineReveal from "../components/TaglineReveal";
 import Accordion from "../components/Accordion";
 import ResinArt from "../components/ResinArt";
 import JewelleryArt from "../components/JewelleryArt";
-import { featuredProducts, products } from "../data/catalog";
+import { useCatalog } from "../context/CatalogContext";
+import CatalogStatus from "../components/CatalogStatus";
 import { care, faqs, jewellery, process, trust } from "../data/content";
 import { usePageMeta } from "../hooks/usePageMeta";
 
@@ -48,6 +49,7 @@ function FaqSchema() {
 }
 
 export default function Home() {
+  const { featuredProducts, products, ready } = useCatalog();
   usePageMeta({
     title: null,
     description:
@@ -125,13 +127,14 @@ export default function Home() {
               title="Made to be kept."
               action={
                 <Link className="link-arrow" to="/shop">
-                  View all {products.length} pieces
+                  {ready ? `View all ${products.length} pieces` : "View the collection"}
                   <ArrowUpRight size={15} weight="regular" aria-hidden="true" />
                 </Link>
               }
             />
           </Reveal>
 
+          <CatalogStatus empty={products.length === 0} />
           <div className="product-grid">
             {featuredProducts.map((product, index) => (
               <Reveal key={product.id} delay={(index % 3) * 80}>

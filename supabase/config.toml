@@ -1,0 +1,7 @@
+project_id = "catalogue-storefront"
+
+[functions.catalog-media]
+# The handler explicitly verifies every bearer token with Supabase Auth and
+# checks the private owner allowlist before doing anything privileged.
+# This also supports projects using modern publishable keys/signing keys.
+verify_jwt = false

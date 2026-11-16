@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "@phosphor-icons/react";
-import ProductArt from "./ProductArt";
+import ProductImage from "./ProductImage";
 import { useTilt } from "../hooks/useTilt";
 import { formatPrice } from "../lib/format";
 
@@ -15,11 +15,8 @@ export default function ProductCard({ product }) {
         aria-label={`${product.name}, ${formatPrice(product.price)}`}
       >
         <div className="product-card__media">
-          {product.image ? (
-            <img src={product.image} alt={product.name} loading="lazy" decoding="async" />
-          ) : (
-            <ProductArt product={product} />
-          )}
+          <ProductImage product={product} width={800} />
+          {product.availability === "sold_out" && <span className="product-card__availability">Sold out</span>}
           {product.hallmark && (
             <span className="product-card__badge">
               Hallmarked {product.metal ? product.metal.toLowerCase() : "metal"}

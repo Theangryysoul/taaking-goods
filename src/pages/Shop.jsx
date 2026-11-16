@@ -5,11 +5,13 @@ import Reveal from "../components/Reveal";
 import ProductCard from "../components/ProductCard";
 import ResinArt from "../components/ResinArt";
 import JewelleryArt from "../components/JewelleryArt";
-import { categories, products } from "../data/catalog";
+import { useCatalog } from "../context/CatalogContext";
+import CatalogStatus from "../components/CatalogStatus";
 import { jewellery } from "../data/content";
 import { usePageMeta } from "../hooks/usePageMeta";
 
 export default function Shop() {
+  const { categories, products, ready, error } = useCatalog();
   usePageMeta({
     title: "Shop",
     description:
@@ -26,7 +28,7 @@ export default function Shop() {
       category === "All"
         ? products
         : products.filter((product) => product.category === category),
-    [category],
+    [category, products],
   );
 
   const chooseCategory = (next) => {
@@ -37,7 +39,7 @@ export default function Shop() {
   };
 
   return (
-    <>
+    <div className="shop-page" data-category={category}>
       <section className="page-head shop-head">
         <div className="container">
           <p className={`eyebrow${category !== "All" ? " shop-eyebrow" : ""}`} data-category={category !== "All" ? category : ""}>
@@ -75,6 +77,7 @@ export default function Shop() {
 
       <section className="section shop-list" data-category={category}>
         <div className="container">
+          <CatalogStatus />
           {category === "Jewellery" && (
             <Reveal className="jewellery-note">
               <div className="jewellery-note__body">
@@ -101,7 +104,7 @@ export default function Shop() {
                 </Reveal>
               ))}
             </div>
-          ) : (
+          ) : ready && !error ? (
             <div className="empty-state">
               <div className="empty-state__art">
                 <ResinArt shape="loop" palette="sage" withBackground={false} />
@@ -116,7 +119,7 @@ export default function Shop() {
                 <ArrowRight size={16} weight="regular" aria-hidden="true" />
               </button>
             </div>
-          )}
+          ) : null}
 
           <div className="shop-note">
             <p className="body-5">
@@ -131,6 +134,6 @@ export default function Shop() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

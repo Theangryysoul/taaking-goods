@@ -1,15 +1,11 @@
 export const formatPrice = (price) => {
-  if (typeof price !== "number" || Number.isNaN(price)) return "Price on enquiry";
+  if (typeof price !== "number" || !Number.isFinite(price)) return "Price on enquiry";
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: Number.isInteger(price) ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(price);
 };
 
-export const rupeeTotal = (value) =>
-  new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
+export const rupeeTotal = (value) => formatPrice(value);

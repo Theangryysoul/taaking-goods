@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight, ShoppingBag } from "@phosphor-icons/react";
-import ProductArt from "../components/ProductArt";
 import Accordion from "../components/Accordion";
 import Quantity from "../components/Quantity";
 import Reveal from "../components/Reveal";
 import ProductCard from "../components/ProductCard";
 import SectionHead from "../components/SectionHead";
 import NotFound from "./NotFound";
-import { getProduct, getRelated } from "../data/catalog";
+import { useCatalog } from "../context/CatalogContext";
+import CatalogStatus from "../components/CatalogStatus";
+import ProductImage from "../components/ProductImage";
 import { formatPrice } from "../lib/format";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { useCart } from "../context/CartContext";
@@ -17,7 +18,9 @@ import { hasWhatsApp, whatsappUrl } from "../config";
 function ProductView({ product }) {
   const [qty, setQty] = useState(1);
   const { add, openCart } = useCart();
+  const { getRelated, error: catalogError } = useCatalog();
   const related = getRelated(product, 3);
+  const soldOut = product.availability === "sold_out";
   const isJewellery = product.category === "Jewellery";
 
   usePageMeta({
@@ -40,6 +43,7 @@ function ProductView({ product }) {
     <>
       <section className="product-page" data-category={product.category}>
         <div className="container">
+          <CatalogStatus />
           <nav className="breadcrumb" aria-label="Breadcrumb">
             <Link to="/shop">Shop</Link>
             <span aria-hidden="true">/</span>
@@ -49,22 +53,11 @@ function ProductView({ product }) {
           <div className="product-view">
             <div className="product-view__media-wrap">
               <Reveal className="product-view__media">
-                {product.image ? (
-                  <img src={product.image} alt={product.name} />
-                ) : (
-                  <ProductArt
-                    product={product}
-                    label={
-                      isJewellery
-                        ? `${product.name}, hallmarked ${product.metal?.toLowerCase()} jewellery`
-                        : `${product.name}, a hand poured resin piece`
-                    }
-                  />
-                )}
+                <ProductImage product={product} width={1600} eager />
               </Reveal>
               <p className="caption-2 product-view__caption">
                 {isJewellery
-                  ? "Hallmarked metal. Purity, weight, and making charges are confirmed on WhatsApp."
+                  ? `${product.hallmark ? "Hallmarked metal. " : ""}Purity, weight, and making charges are confirmed on WhatsApp.`
                   : "Hand poured, so tone and pattern vary from piece to piece."}
               </p>
             </div>
@@ -75,7 +68,7 @@ function ProductView({ product }) {
                 <h1 className="heading-2 product-view__title">{product.name}</h1>
                 {isJewellery && (
                   <p className="product-view__hallmark">
-                    Hallmarked {product.metal?.toLowerCase()} · purity, weight, and making charges confirmed before payment
+                    {product.hallmark ? "Hallmarked " : ""}{product.metal?.toLowerCase()} · purity, weight, and making charges confirmed before payment
                   </p>
                 )}
                 <div className="product-view__price-row">
@@ -95,9 +88,9 @@ function ProductView({ product }) {
                   onChange={setQty}
                   label={`Quantity of ${product.name}`}
                 />
-                <button type="button" className="btn btn--primary product-add" onClick={addToBag}>
+                <button type="button" className="btn btn--primary product-add" onClick={addToBag} disabled={soldOut || Boolean(catalogError)}>
                   <ShoppingBag size={17} weight="regular" aria-hidden="true" />
-                  Add to bag
+                  {soldOut ? "Sold out" : "Add to bag"}
                 </button>
               </Reveal>
 
@@ -172,8 +165,10 @@ function ProductView({ product }) {
 
 export default function Product() {
   const { slug } = useParams();
+  const { getProduct, ready, loading, error } = useCatalog();
   const product = getProduct(slug);
 
+  if (!product && (!ready || loading || error)) return <section className="section"><div className="container"><CatalogStatus showLoading /></div></section>;
   if (!product) return <NotFound />;
-  return <ProductView product={product} />;
+  return <ProductView key={product.id} product={product} />;
 }

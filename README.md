@@ -30,7 +30,9 @@ npm run build    # production build in dist/
 npm run preview  # preview the production build
 ```
 
-Node 20 or newer is recommended.
+Node 22.12 or newer is recommended for the current Vite toolchain.
+
+Catalogue checks: `npm test`, `npm run build`, and `npm run test:browser` (install Chromium first with `npx playwright install chromium`). The browser checks use local service mocks; follow the setup guide's live RLS/upload checklist before launch.
 
 ## Stack
 
@@ -40,6 +42,9 @@ Node 20 or newer is recommended.
 - Three.js for the one interactive resin object on the home page
 - Manrope (variable) as the only typeface
 - Phosphor icons
+- Supabase PostgreSQL/Auth for the live catalogue and owner panel
+- Cloudinary photos through an authenticated Supabase Edge Function
+- Vitest/React Testing Library and Playwright for catalogue checks
 - Plain CSS with design tokens, no UI framework
 
 ## What to replace before launch
@@ -65,68 +70,34 @@ When `whatsapp` is empty:
 
 Set the number and all of these paths switch to WhatsApp automatically.
 
-### 2. Products: `src/data/catalog.js`
+### 2. Owner-managed catalogue
 
-Each entry has the following shape (for resin):
+The owner can manage products, prices, visibility, availability, featured pieces and a primary photo at **`/admin`**. Supabase provides PostgreSQL and owner authentication; Cloudinary provides image delivery through an authenticated Supabase Edge Function.
 
-```js
-{
-  id: "sandbar-coasters",
-  slug: "sandbar-coaster-set",
-  name: "Sandbar coaster set",
-  category: "Tableware",          // must be one of the categories array
-  price: 1450,                    // rupees, or null for "Price on enquiry"
-  art: { shape: "coaster", palette: "amber" },
-  image: "/images/sandbar-coasters.jpg", // optional, see below
-  summary: "One line for the card and product page.",
-  description: "The longer note beside the product.",
-  details: ["Set of four", "Approx 9 cm × 9 cm"],
-  featured: true                  // shows on the home page
-}
-```
+**Setup:** [Catalogue and owner-panel setup](docs/catalog-admin-setup.md). Apply the database migration, create/enrol the owner, configure the public frontend variables, and set Cloudinary secrets on the server function. No accounts or remote services are configured automatically.
 
-For jewellery the entry also has:
+- With no Supabase variables, `src/data/catalog.js` is used only as a labelled sample catalogue. Sample ordering is disabled.
+- With Supabase configured, public pages read published database products. Database failures never silently fall back to samples.
+- Draft/hidden products are owner-only; sold-out published products remain visible but cannot be ordered.
+- Routine updates require no code changes or redeployments.
+- The owner can explicitly import samples as **private drafts** into an empty catalogue. Replace placeholder facts before publishing.
 
-```js
-{
-  id: "hallmarked-gold-chain",
-  slug: "hallmarked-gold-chain",
-  name: "Hallmarked gold chain",
-  category: "Jewellery",
-  price: null,
-  metal: "Gold",
-  hallmark: true,
-  art: { shape: "chain", palette: "gold" },
-  summary: "A fine gold chain with a small bar pendant, made for every day.",
-  description: "A light chain in hallmarked gold, finished by hand and kept simple.",
-  details: [
-    "BIS hallmarked gold",
-    "Purity confirmed before payment",
-    "Weight and making charges shared on WhatsApp",
-    "Arrives in a studio jewellery box",
-  ],
-  featured: true
-}
-```
-
-To add a product, copy an entry and give it a unique `id` and `slug`. The category filter and related products update themselves.
+Product fields include name, stable URL, category, INR price or Price on enquiry, descriptions, detail lines, generated-art fallback, featured flag, publication status, availability, and Jewellery metal/hallmark fields.
 
 ### 3. Photographs
 
-The site currently uses generated artwork so it looks complete without stock imagery. When the real photographs are ready:
+Upload JPEG, PNG or WebP photos in the owner editor (up to 5 MB). The app resizes large images and uploads them through the owner-authorized server function; no Cloudinary secrets are exposed to the browser. Cloudinary serves optimized sizes for cards, product pages and bags.
 
-1. Put the files in `public/images/`.
-2. Add `image: "/images/your-file.jpg"` to the product in `src/data/catalog.js`.
-
-That is all. The generated artwork steps aside, and the same image is used on the product card, the product page, and in the bag.
+The current layout supports **one primary photo per product**. No photo (or failed image delivery) falls back to generated artwork. Keep original photographs separately; Google Drive is suitable as an original-photo archive, not as the storefront's image host.
 
 Useful image specs:
 
-- 4:5 portrait, around 1600 × 2000 px is plenty
-- JPEG or WebP, ideally under 300 KB each
-- shoot on a plain wall or stone surface, in soft daylight
-- keep the piece in the centre; cards crop from the centre
-- one image per piece is enough for this layout
+- 4:5 portrait, up to 1600 × 2000 px
+- JPEG/WebP, ideally under 300 KB
+- plain background and soft daylight
+- piece centred; cards crop from the centre
+
+Photo replacement cleanup happens after a successful save. The owner panel offers **Clean unused photos** and **Export catalogue backup**; see the setup guide for quotas, cleanup caveats and live access-control checks.
 
 ### 4. Copy: `src/data/content.js`
 
@@ -186,6 +157,8 @@ Jewellery pieces use generated metal artwork (`JewelleryArt.jsx`) kept separate 
 
 ## Accessibility and performance
 
+The original storefront includes the following accessibility/performance patterns. Bundle-size figures describe the original static build; remeasure after adding Supabase and the owner panel.
+
 - Skip link, visible focus styles, labelled icon buttons, and native `<dialog>` for the bag.
 - The mobile menu traps the page behind it, closes on Escape, and restores focus.
 - Form errors are announced and tied to their fields with `aria-describedby`.
@@ -207,7 +180,9 @@ On Netlify, a `_redirects` file with `/* /index.html 200` is enough. On Vercel, 
 
 There are no invented prices, review counts, customer logos, press mentions, or newsletter forms. The catalogue is clearly marked as a sample in the source, and every price reads **Price on enquiry** until real prices are supplied. This is better than a page full of numbers the studio has to walk back later.
 
-## Checks already run
+## Original storefront checks
+
+The checks below describe the original static storefront, **not verification of the new owner panel or live integrations**. Run the new automated checks and the setup guide's live permissions checklist after configuring the services.
 
 - Production build passes.
 - Layout checked at 320, 360, 390, 480, 640, 768, 900, 1024, 1180, 1280, 1440, and 1728 px with no horizontal overflow.

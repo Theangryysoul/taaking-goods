@@ -17,12 +17,14 @@ import { buildOrderMessage } from "../lib/order";
 import { copyText } from "../lib/clipboard";
 import { startScroll, stopScroll } from "../lib/scroll";
 import ResinArt from "./ResinArt";
-import ProductArt from "./ProductArt";
+import ProductImage from "./ProductImage";
 
 const emptyFields = { name: "", city: "", pincode: "", note: "" };
 
 export default function CartDrawer() {
-  const { lines, count, subtotal, isOpen, closeCart, setQty, remove } = useCart();
+  const { lines, count, subtotal, isOpen, closeCart, setQty, remove, notice, pending, demo, error: catalogError, verifyOrder } = useCart();
+  const [checking, setChecking] = useState(false);
+  const [preparedOrder, setPreparedOrder] = useState(null);
   const [fields, setFields] = useState(emptyFields);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ kind: "", message: "" });
@@ -41,6 +43,7 @@ export default function CartDrawer() {
     setClosing(false);
     setErrors({});
     setStatus({ kind: "", message: "" });
+    setPreparedOrder(null);
 
     if (!dialog.open) dialog.showModal();
     stopScroll();
@@ -90,56 +93,65 @@ export default function CartDrawer() {
     return Object.keys(next).length === 0;
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setStatus({ kind: "", message: "" });
+  const orderSnapshot = JSON.stringify({ lines: lines.map(({ product, qty }) => [product.id, product.name, product.slug, product.price, qty]), fields });
+  const orderReady = preparedOrder?.snapshot === orderSnapshot && Date.now() < preparedOrder.expiresAt && !catalogError;
+  const validatingRef = useRef(false);
+  useEffect(() => {
+    if (preparedOrder && preparedOrder.snapshot !== orderSnapshot) {
+      setPreparedOrder(null);
+      setStatus({ kind: "info", message: "Your order details changed. Check current prices and availability again before sending." });
+    }
+  }, [orderSnapshot, preparedOrder]);
+  useEffect(() => {
+    if (!preparedOrder) return undefined;
+    const expiry = window.setTimeout(() => {
+      setPreparedOrder(null);
+      setStatus({ kind: "info", message: "Please check current prices and availability again before sending." });
+    }, 60000);
+    return () => window.clearTimeout(expiry);
+  }, [preparedOrder]);
 
+  // Verify first, then use a second direct click for WhatsApp/clipboard. A
+  // network await can consume the browser's popup/clipboard user gesture.
+  const prepareOrder = async () => {
+    if (validatingRef.current) return;
+    setStatus({ kind: "", message: "" });
+    setPreparedOrder(null);
     if (!validate()) {
       setStatus({ kind: "error", message: "Check the highlighted details and try again." });
       return;
     }
-
-    const message = buildOrderMessage(lines, fields, subtotal);
-
-    if (!hasWhatsApp()) {
-      setStatus({
-        kind: "info",
-        message:
-          "WhatsApp ordering is not connected yet. Copy your order and send it to the studio.",
-      });
-      return;
+    validatingRef.current = true;
+    setChecking(true);
+    try {
+      const checked = await verifyOrder();
+      if (!checked.lines.length) throw new Error("There are no available pieces in your bag.");
+      if (checked.changed) {
+        setStatus({ kind: "info", message: "Prices or availability changed. Review the updated bag, then check your order again." });
+        return;
+      }
+      setPreparedOrder({ snapshot: orderSnapshot, message: buildOrderMessage(checked.lines, fields, checked.subtotal), expiresAt: Date.now() + 60000 });
+      setStatus({ kind: "ok", message: "Prices and availability checked. Your order is ready to send or copy below." });
+    } catch {
+      setStatus({ kind: "error", message: "We could not verify current prices and availability. Try checking your order again." });
+    } finally {
+      validatingRef.current = false;
+      setChecking(false);
     }
+  };
 
-    const opened = window.open(whatsappUrl(message), "_blank", "noopener,noreferrer");
-    if (!opened) {
-      setStatus({
-        kind: "error",
-        message: "Your browser blocked the WhatsApp window. Copy your order instead.",
-      });
-      return;
-    }
-
-    setStatus({
-      kind: "ok",
-      message: "WhatsApp opened with your order. Send it there and we will confirm the details.",
-    });
+  const onSubmit = (event) => {
+    event.preventDefault();
+    prepareOrder();
   };
 
   const onCopy = async () => {
-    setStatus({ kind: "", message: "" });
-    if (!validate()) {
-      setStatus({ kind: "error", message: "Check the highlighted details and try again." });
-      return;
-    }
-
+    if (!orderReady || Date.now() >= preparedOrder.expiresAt) { prepareOrder(); return; }
     try {
-      await copyText(buildOrderMessage(lines, fields, subtotal));
+      await copyText(preparedOrder.message);
       setStatus({ kind: "ok", message: "Order copied. Send it to the studio whenever you are ready." });
     } catch {
-      setStatus({
-        kind: "error",
-        message: "Copy failed. Your browser blocked clipboard access.",
-      });
+      setStatus({ kind: "error", message: "Copy failed. Your browser blocked clipboard access." });
     }
   };
 
@@ -183,7 +195,10 @@ export default function CartDrawer() {
         </header>
 
         <div className="cart-body" data-lenis-prevent>
-          {empty ? (
+          {demo && <p className="catalog-notice" role="status">Sample bag · Live ordering will be enabled after catalogue setup.</p>}
+          {notice && <p className="catalog-notice" role="status">{notice}</p>}
+          {catalogError && <p className="catalog-notice catalog-notice--error" role="alert">The catalogue is unavailable. Your saved bag is retained; retry when the connection returns.</p>}
+          {pending || (catalogError && empty) ? <p className="catalog-notice" role="status">{pending ? "Loading your saved bag…" : "Your bag will be shown when the catalogue is available again."}</p> : empty ? (
             <div className="cart-empty">
               <div className="cart-empty__art">
                 <ResinArt shape="dish" palette="sage" label="A resin dish in muted green" />
@@ -203,11 +218,7 @@ export default function CartDrawer() {
                 {lines.map(({ product, qty }) => (
                   <li className="cart-line" key={product.id}>
                     <div className="cart-line__art">
-                      {product.image ? (
-                        <img src={product.image} alt={product.name} />
-                      ) : (
-                        <ProductArt product={product} />
-                      )}
+                      <ProductImage product={product} width={200} />
                     </div>
 
                     <div className="cart-line__body">
@@ -348,22 +359,29 @@ export default function CartDrawer() {
               </span>
             </div>
 
-            {hasWhatsApp() ? (
+            {orderReady ? (
               <>
-                <button type="submit" form="bag-order-form" className="btn btn--primary cart-submit">
-                  <WhatsappLogo size={18} weight="regular" aria-hidden="true" />
-                  Send order on WhatsApp
-                </button>
-
+                {hasWhatsApp() && (
+                  <a className="btn btn--primary cart-submit" href={whatsappUrl(preparedOrder.message)} target="_blank" rel="noopener noreferrer" onClick={(event) => {
+                    if (Date.now() >= preparedOrder.expiresAt) {
+                      event.preventDefault();
+                      setPreparedOrder(null);
+                      setStatus({ kind: "info", message: "Please check current prices and availability again before sending." });
+                    }
+                  }}>
+                    <WhatsappLogo size={18} weight="regular" aria-hidden="true" />
+                    Send order on WhatsApp
+                  </a>
+                )}
                 <button type="button" className="cart-copy" onClick={onCopy}>
                   <Copy size={14} weight="regular" aria-hidden="true" />
                   Copy order details
                 </button>
               </>
             ) : (
-              <button type="button" className="btn btn--primary cart-submit" onClick={onCopy}>
-                <Copy size={17} weight="regular" aria-hidden="true" />
-                Copy order details
+              <button type="submit" form="bag-order-form" className="btn btn--primary cart-submit" disabled={checking || pending || demo}>
+                <Check size={17} weight="regular" aria-hidden="true" />
+                {checking ? "Checking prices…" : "Check order & continue"}
               </button>
             )}
 

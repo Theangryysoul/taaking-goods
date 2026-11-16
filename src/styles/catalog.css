@@ -1,0 +1,5 @@
+.catalog-notice { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 24px; padding: 16px 20px; border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: var(--radius-sm); background: var(--sand-100); color: var(--ink-700); font-size: 14px; line-height: 22px; }
+.catalog-notice--error { border-left-color: var(--danger); }
+.catalog-notice button { color: var(--aqua); }
+.product-card__availability { position: absolute; left: 16px; bottom: 16px; padding: 6px 12px; border-radius: var(--radius-pill); background: var(--sand-0); color: var(--ink-700); font-size: 12px; line-height: 18px; border: 1px solid var(--line-strong); }
+.cart-dialog a.cart-submit { width: 100%; }
