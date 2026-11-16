@@ -51,8 +51,9 @@ describe("async catalogue and saved bag", () => {
     await waitFor(() => expect(screen.getByTestId("state")).toHaveTextContent("error"));
     fireEvent.click(screen.getByText("Refresh"));
     await waitFor(() => expect(screen.getByTestId("count")).toHaveTextContent("1"));
-    expect(screen.getByTestId("notice")).toHaveTextContent("no longer available");
-    // The saved bag is reconciled and re-persisted asynchronously (via a React effect).
+    // Reconciliation runs in an effect, so the notice and the re-persisted bag
+    // both arrive asynchronously after the catalogue retry resolves.
+    await waitFor(() => expect(screen.getByTestId("notice")).toHaveTextContent("no longer available"));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("taaking-bag-v1"))).toEqual([{ id: "p1", qty: 1 }]));
   });
   it("shows the latest prices and asks for review when order verification detects a change", async () => {

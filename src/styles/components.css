@@ -557,6 +557,28 @@ html.has-custom-cursor select {
   }
 }
 
+/* Native modal dialogs (the bag drawer, admin confirms) are painted in the
+   browser's top layer, which always sits above the custom cursor's z-index.
+   While a modal is open, hide the custom overlays and bring back the system
+   cursor so controls inside the dialog stay visible and clickable. */
+html:has(dialog[open]) .cursor-dot,
+html:has(dialog[open]) .cursor-ring,
+html:has(dialog[open]) .cursor-label {
+  display: none;
+}
+
+html.has-custom-cursor:has(dialog[open]),
+html.has-custom-cursor:has(dialog[open]) body {
+  cursor: auto;
+}
+
+html.has-custom-cursor:has(dialog[open]) a,
+html.has-custom-cursor:has(dialog[open]) button,
+html.has-custom-cursor:has(dialog[open]) summary,
+html.has-custom-cursor:has(dialog[open]) [data-cursor] {
+  cursor: pointer;
+}
+
 /* Hero 3D stage ------------------------------------------------------------- */
 
 .resin-stage {
